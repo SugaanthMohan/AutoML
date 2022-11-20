@@ -13,8 +13,6 @@ Automated Machine Learning Optimizes Machine Learning Pipelines using Genetic Pr
 
 ###### CONTENTS
 1. [License](LICENSE)
-2. [BenchMarking decorator (In Secs)](Utils/StandardBenchMarker.py)
-3. [Test Script 1](TestScript1.py)
 ****
 
 ###### AUTHOR INFO
