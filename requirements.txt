@@ -2,3 +2,6 @@ pandas
 numpy
 sklearn
 tpot
+pytest
+pylint
+pytest-cov
