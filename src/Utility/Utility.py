@@ -1,4 +1,4 @@
-from Utility.Config import Configuration
+from src.Utility.Config import Configuration
 from pprint import pprint
 
 
@@ -9,7 +9,7 @@ class Utils:
     )
 
     def __init__(self):
-        self.config: Configuration = Configuration().configuration
+        self.config: dict = Configuration().configuration
 
 
 if __name__ == '__main__':

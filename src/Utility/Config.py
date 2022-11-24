@@ -1,12 +1,14 @@
 from pathlib import Path
-import os, pprint
+import os
+import pprint
 from configparser import ConfigParser
 from ast import literal_eval
 from datetime import datetime
 import tempfile
+from typing import Any, Dict
+
 
 class Configuration:
-
     __slots__ = (
         '__file',
         '__directory',
@@ -16,7 +18,7 @@ class Configuration:
     def __init__(self):
         self.__file: str = "AutoML.ini"
         self.__directory: str = "Config"
-        self.configuration: dict = self.load_configuration()
+        self.configuration: Dict[Any, Any] = self.load_configuration()
 
     def get_configuration_file(self) -> str:
 
@@ -28,7 +30,7 @@ class Configuration:
             )
         )
 
-    def load_all_configs(self, config_file_: str) -> dict:
+    def load_all_configs(self, config_file_: str) -> Dict[Any, Any]:
 
         # DEFINE CONFIGURATION
         configuration = dict()
@@ -73,7 +75,6 @@ class Configuration:
     def parse_model(self, model_configuration: dict):
 
         for key in model_configuration.keys():
-
             model_configuration[key] = literal_eval(model_configuration[key])
 
         return model_configuration
@@ -83,7 +84,6 @@ class Configuration:
         regressor_models_dict = {}
 
         for model_name in model_list:
-
             model_config = self.parse_model(model_configuration=config[model_name])
 
             regressor_models_dict.update({model_name: model_config})

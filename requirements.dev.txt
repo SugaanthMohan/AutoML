@@ -1,0 +1,5 @@
+flake8
+cox
+pytest
+pytest-cov
+mypy

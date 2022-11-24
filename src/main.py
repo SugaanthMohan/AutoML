@@ -1,7 +1,8 @@
-from tpot import TPOTRegressor, decorators
-from Utility.Utility import Utils
+# from tpot import TPOTRegressor, decorators
+import Utility
 
-my_utils = Utils()
+my_utils = Utility.Utility.Utils()
+
 
 class WrapperMain:
 
@@ -21,5 +22,4 @@ class WrapperMain:
 
 if __name__ == '__main__':
     wm = WrapperMain()
-    print(wm.regressor_config)
     print(wm.tpot_regressor_config)
