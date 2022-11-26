@@ -1,12 +1,14 @@
 from pathlib import Path
-import os, pprint
+import os
+import pprint
 from configparser import ConfigParser
 from ast import literal_eval
 from datetime import datetime
 import tempfile
+from typing import Any, Dict, List
+
 
 class Configuration:
-
     __slots__ = (
         '__file',
         '__directory',
@@ -15,8 +17,8 @@ class Configuration:
 
     def __init__(self):
         self.__file: str = "AutoML.ini"
-        self.__directory: str = "Config"
-        self.configuration: dict = self.load_configuration()
+        self.__directory: str = "MyConfig"
+        self.configuration: Dict[Any, Any] = self.load_configuration()
 
     def get_configuration_file(self) -> str:
 
@@ -28,16 +30,13 @@ class Configuration:
             )
         )
 
-    def load_all_configs(self, config_file_: str) -> dict:
+    def load_all_configs(self, config_file_: str) -> Dict[Any, Any]:
 
         # DEFINE CONFIGURATION
         configuration = dict()
 
         # CREATE CONFIG OBJECT
         cfg_obj = ConfigParser()
-
-        # SET STRING CONFIGURATION
-        cfg_obj.optionxform = str
 
         cfg_obj.read(
             filenames=config_file_,
@@ -49,7 +48,7 @@ class Configuration:
 
         return configuration
 
-    def load_configuration(self) -> dict:
+    def load_configuration(self) -> Dict[Any, Any]:
 
         config_file = self.get_configuration_file()
 
@@ -59,31 +58,29 @@ class Configuration:
 
         return config
 
-    def automl_base_config_updates(self, prefix: str, config: dict) -> dict:
+    def automl_base_config_updates(self, prefix: str, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
-        config[prefix]['MODELS'] = list(
+        config[prefix]['models'] = list(
             map(
                 str,
-                config[prefix]['MODELS'].split('\n')
+                config[prefix]['models'].split('\n')
             )
         )
 
         return config
 
-    def parse_model(self, model_configuration: dict):
+    def parse_model(self, model_configuration: Dict[Any, Any]):
 
         for key in model_configuration.keys():
-
             model_configuration[key] = literal_eval(model_configuration[key])
 
         return model_configuration
 
-    def parse_and_load_models(self, model_list: list, config: dict) -> dict:
+    def parse_and_load_models(self, model_list: List[Any], config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         regressor_models_dict = {}
 
         for model_name in model_list:
-
             model_config = self.parse_model(model_configuration=config[model_name])
 
             regressor_models_dict.update({model_name: model_config})
@@ -92,7 +89,7 @@ class Configuration:
 
         return regressor_models_dict
 
-    def automl_regressor_config_updates(self, prefix: str, config: dict) -> dict:
+    def automl_regressor_config_updates(self, prefix: str, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         config[prefix]['generations'] = int(
             config[prefix]['generations']
@@ -118,30 +115,29 @@ class Configuration:
             config[prefix]['n_jobs']
         )
 
-        config['REGRESSOR_CONFIG'] = self.parse_and_load_models(
-            model_list=config["AUTOML"]['MODELS'],
+        config[prefix]['config_dict'] = self.parse_and_load_models(
+            model_list=config["AUTOML"]['models'],
             config=config
         )
 
-        config.pop(prefix)
         config.pop('AUTOML')
 
         return config
 
-    def logger_config_update(self, config: dict) -> dict:
+    def logger_config_update(self, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         timer = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        log_file = config['LOGGER']['PREFIX'].replace('(?Timestamp)', timer)
+        log_file = config['LOGGER']['prefix'].replace('(?Timestamp)', timer)
 
-        if config['LOGGER']['TYPE'] == 'TEMP':
+        if config['LOGGER']['type'] == 'TEMP':
             logger_dir = os.path.join(
                 tempfile.gettempdir(),
-                config['LOGGER']['DIR']
+                config['LOGGER']['dir']
             )
 
-        elif config['LOGGER']['TYPE'] == 'FILESYSTEM':
-            logger_dir = config['LOGGER']['DIR']
+        elif config['LOGGER']['type'] == 'FILESYSTEM':
+            logger_dir = config['LOGGER']['dir']
         else:
             raise IsADirectoryError("UNABLE TO FIND TEMP DIRECTORY TYPE")
 
@@ -153,12 +149,12 @@ class Configuration:
 
         return config
 
-    def post_process_configs(self, config: dict) -> dict:
+    def post_process_configs(self, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         config = self.automl_base_config_updates(prefix="AUTOML", config=config)
 
         config = self.automl_regressor_config_updates(
-            prefix=config['AUTOML']['CONFIGURATION'], config=config
+            prefix=config['AUTOML']['configuration'], config=config
         )
 
         config = self.logger_config_update(config=config)

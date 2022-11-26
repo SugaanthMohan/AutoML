@@ -1,5 +1,6 @@
-from Utility.Config import Configuration
+from MyConfig.Config_base import Configuration
 from pprint import pprint
+from typing import Any, Dict
 
 
 class Utils:
@@ -9,7 +10,7 @@ class Utils:
     )
 
     def __init__(self):
-        self.config: Configuration = Configuration().configuration
+        self.config: Dict[Any, Any] = Configuration().configuration
 
 
 if __name__ == '__main__':
