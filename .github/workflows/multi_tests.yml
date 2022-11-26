@@ -22,6 +22,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions pytest pytest-cov pylint flake8 mypy
+        pip install -e .
     - name: Test with flake8
       run: |
         flake8
