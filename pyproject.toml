@@ -3,9 +3,9 @@ requires = ["setuptools>=42.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
-addopts = "--cov=Utility"
-test_paths = [
-    "Test",
+addopts = "--cov=Utility --cov=MyConfig --cov=Models"
+testpaths = [
+    "TestSuite",
 ]
 
 [tool.mypy]
