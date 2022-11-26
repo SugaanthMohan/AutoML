@@ -38,7 +38,6 @@ class Configuration:
         # CREATE CONFIG OBJECT
         cfg_obj = ConfigParser()
 
-
         cfg_obj.read(
             filenames=config_file_,
             encoding='utf-8'
