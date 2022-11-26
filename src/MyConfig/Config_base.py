@@ -17,7 +17,7 @@ class Configuration:
 
     def __init__(self):
         self.__file: str = "AutoML.ini"
-        self.__directory: str = "Config"
+        self.__directory: str = "MyConfig"
         self.configuration: Dict[Any, Any] = self.load_configuration()
 
     def get_configuration_file(self) -> str:
@@ -61,10 +61,10 @@ class Configuration:
 
     def automl_base_config_updates(self, prefix: str, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
-        config[prefix]['MODELS'] = list(
+        config[prefix]['models'] = list(
             map(
                 str,
-                config[prefix]['MODELS'].split('\n')
+                config[prefix]['models'].split('\n')
             )
         )
 
@@ -116,12 +116,11 @@ class Configuration:
             config[prefix]['n_jobs']
         )
 
-        config['REGRESSOR_CONFIG'] = self.parse_and_load_models(
-            model_list=config["AUTOML"]['MODELS'],
+        config[prefix]['config_dict'] = self.parse_and_load_models(
+            model_list=config["AUTOML"]['models'],
             config=config
         )
 
-        config.pop(prefix)
         config.pop('AUTOML')
 
         return config
@@ -130,16 +129,16 @@ class Configuration:
 
         timer = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        log_file = config['LOGGER']['PREFIX'].replace('(?Timestamp)', timer)
+        log_file = config['LOGGER']['prefix'].replace('(?Timestamp)', timer)
 
-        if config['LOGGER']['TYPE'] == 'TEMP':
+        if config['LOGGER']['type'] == 'TEMP':
             logger_dir = os.path.join(
                 tempfile.gettempdir(),
-                config['LOGGER']['DIR']
+                config['LOGGER']['dir']
             )
 
-        elif config['LOGGER']['TYPE'] == 'FILESYSTEM':
-            logger_dir = config['LOGGER']['DIR']
+        elif config['LOGGER']['type'] == 'FILESYSTEM':
+            logger_dir = config['LOGGER']['dir']
         else:
             raise IsADirectoryError("UNABLE TO FIND TEMP DIRECTORY TYPE")
 
@@ -156,7 +155,7 @@ class Configuration:
         config = self.automl_base_config_updates(prefix="AUTOML", config=config)
 
         config = self.automl_regressor_config_updates(
-            prefix=config['AUTOML']['CONFIGURATION'], config=config
+            prefix=config['AUTOML']['configuration'], config=config
         )
 
         config = self.logger_config_update(config=config)

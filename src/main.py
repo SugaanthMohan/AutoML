@@ -1,8 +1,9 @@
 # from tpot import TPOTRegressor, decorators
-from src.Utility import Utility
+from Utility import Utility_base
+from pprint import pprint
 from typing import Any, Dict
 
-my_utils = Utility.Utils()
+my_utils = Utility_base.Utils()
 
 
 class WrapperMain:
@@ -23,4 +24,4 @@ class WrapperMain:
 
 if __name__ == '__main__':
     wm = WrapperMain()
-    print(wm.tpot_regressor_config)
+    pprint(wm.tpot_regressor_config)

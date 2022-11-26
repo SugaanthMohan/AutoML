@@ -1,4 +1,4 @@
-from src.Utility.Config import Configuration
+from MyConfig.Config_base import Configuration
 from pprint import pprint
 from typing import Any, Dict
 
