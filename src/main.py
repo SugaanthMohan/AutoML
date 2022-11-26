@@ -1,7 +1,8 @@
 # from tpot import TPOTRegressor, decorators
-import Utility
+from src.Utility import Utility
+from typing import Any, Dict
 
-my_utils = Utility.Utility.Utils()
+my_utils = Utility.Utils()
 
 
 class WrapperMain:
@@ -11,7 +12,7 @@ class WrapperMain:
     )
 
     def __init__(self):
-        self.tpot_regressor_config: dict = my_utils.config['AUTOML_CONFIGURATIONS']
+        self.tpot_regressor_config: Dict[Any, Any] = my_utils.config['AUTOML_CONFIGURATIONS']
 
     def chill(self):
         pass

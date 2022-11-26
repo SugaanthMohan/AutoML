@@ -5,7 +5,7 @@ from configparser import ConfigParser
 from ast import literal_eval
 from datetime import datetime
 import tempfile
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 
 class Configuration:
@@ -38,8 +38,6 @@ class Configuration:
         # CREATE CONFIG OBJECT
         cfg_obj = ConfigParser()
 
-        # SET STRING CONFIGURATION
-        cfg_obj.optionxform = str
 
         cfg_obj.read(
             filenames=config_file_,
@@ -51,7 +49,7 @@ class Configuration:
 
         return configuration
 
-    def load_configuration(self) -> dict:
+    def load_configuration(self) -> Dict[Any, Any]:
 
         config_file = self.get_configuration_file()
 
@@ -61,7 +59,7 @@ class Configuration:
 
         return config
 
-    def automl_base_config_updates(self, prefix: str, config: dict) -> dict:
+    def automl_base_config_updates(self, prefix: str, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         config[prefix]['MODELS'] = list(
             map(
@@ -72,14 +70,14 @@ class Configuration:
 
         return config
 
-    def parse_model(self, model_configuration: dict):
+    def parse_model(self, model_configuration: Dict[Any, Any]):
 
         for key in model_configuration.keys():
             model_configuration[key] = literal_eval(model_configuration[key])
 
         return model_configuration
 
-    def parse_and_load_models(self, model_list: list, config: dict) -> dict:
+    def parse_and_load_models(self, model_list: List[Any], config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         regressor_models_dict = {}
 
@@ -92,7 +90,7 @@ class Configuration:
 
         return regressor_models_dict
 
-    def automl_regressor_config_updates(self, prefix: str, config: dict) -> dict:
+    def automl_regressor_config_updates(self, prefix: str, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         config[prefix]['generations'] = int(
             config[prefix]['generations']
@@ -128,7 +126,7 @@ class Configuration:
 
         return config
 
-    def logger_config_update(self, config: dict) -> dict:
+    def logger_config_update(self, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         timer = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -153,7 +151,7 @@ class Configuration:
 
         return config
 
-    def post_process_configs(self, config: dict) -> dict:
+    def post_process_configs(self, config: Dict[Any, Any]) -> Dict[Any, Any]:
 
         config = self.automl_base_config_updates(prefix="AUTOML", config=config)
 
