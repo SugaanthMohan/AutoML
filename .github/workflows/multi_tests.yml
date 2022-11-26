@@ -28,5 +28,5 @@ jobs:
     - name: Analysing the code with mypy
       run: |
         mypy $(git ls-files '*.py')
-    - name: Test with tox
-      run: tox
+    - name: Test with pytest
+      run: pytest
